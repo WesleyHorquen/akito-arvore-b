@@ -1,0 +1,30 @@
+1001|123.456.789-01|Ana Beatriz Ferreira da Silva|(92) 91234-5678|Rua 1 de Maio, 123 - Centro, Manacapuru - AM|200 mbps
+1002|987.654.321-02|Carlos Eduardo Mendes Rocha|(92) 98765-4321|Rua 1 de Maio, 456 - Centro, Manacapuru - AM|400 mbps
+1003|456.123.789-03|Fernanda Oliveira Lima Santos|(92) 99876-5432|Rua 1 de Maio, 789 - Centro, Manacapuru - AM|900 mbps
+1004|789.456.123-04|Ricardo Jose Almeida Pereira|(92) 95555-6666|Av. Amazonas, 100 - Centro, Manacapuru - AM|200 mbps
+1005|321.654.987-05|Patricia Silva Costa Oliveira|(92) 97777-8888|Av. Amazonas, 200 - Centro, Manacapuru - AM|400 mbps
+1006|147.258.369-06|Marcos Vinicius Souza Lima|(92) 93333-4444|Rua Marechal Deodoro, 50 - Sao Francisco, Manacapuru - AM|900 mbps
+1007|258.369.147-07|Juliana Cristina Martins Rocha|(92) 98888-9999|Rua Marechal Deodoro, 150 - Sao Francisco, Manacapuru - AM|200 mbps
+1008|369.147.258-08|Rafael Augusto Santos Pereira|(92) 94444-5555|Rua Marechal Deodoro, 250 - Sao Francisco, Manacapuru - AM|400 mbps
+1009|951.753.852-09|Aline Regina Carvalho Nunes|(92) 95555-7777|Rua Marechal Deodoro, 350 - Sao Francisco, Manacapuru - AM|900 mbps
+1010|753.852.951-10|Thiago Henrique Oliveira Rocha|(92) 92222-3333|Rua do Comercio, 100 - Nova Esperanca, Manacapuru - AM|200 mbps
+1011|159.357.852-11|Camila Leticia Santos Alves|(92) 98877-6655|Rua do Comercio, 200 - Nova Esperanca, Manacapuru - AM|400 mbps
+1012|852.753.951-12|Lucas Gabriel Ferreira Mendes|(92) 98456-7890|Rua do Comercio, 300 - Nova Esperanca, Manacapuru - AM|900 mbps
+1013|456.852.951-13|Beatriz Cristina Lima Souza|(92) 98765-4321|Av. 7 de Setembro, 100 - Morada do Sol, Manacapuru - AM|200 mbps
+1014|789.321.654-14|Anderson Luiz Pereira Costa|(92) 99988-7776|Av. 7 de Setembro, 200 - Morada do Sol, Manacapuru - AM|400 mbps
+1015|654.987.321-15|Vanessa Rodrigues Almeida|(92) 93344-5566|Av. 7 de Setembro, 300 - Morada do Sol, Manacapuru - AM|900 mbps
+1016|147.963.852-16|Diego Raphael Santos Oliveira|(92) 98877-6655|Rua Rio Negro, 50 - Jardim Universitario, Manacapuru - AM|200 mbps
+1017|753.159.486-17|Tatiane Marques Silva Rocha|(92) 99999-8888|Rua Rio Negro, 150 - Jardim Universitario, Manacapuru - AM|400 mbps
+1018|951.486.753-18|Eduardo Henrique Sousa Martins|(92) 98777-6655|Rua Rio Negro, 250 - Jardim Universitario, Manacapuru - AM|900 mbps
+1019|357.159.852-19|Larissa Fernanda Oliveira Lima|(92) 98876-5544|Av. Solimoes, 100 - Mutirãa, Manacapuru - AM|200 mbps
+1020|852.159.753-20|Bruno Cesar Mendes Rocha|(92) 97766-5544|Av. Solimoes, 200 - Mutirao, Manacapuru - AM|400 mbps
+1021|654.123.987-21|Renata Beatriz Carvalho Souza|(92) 96655-4433|Av. Solimoes, 300 - Mutirao, Manacapuru - AM|900 mbps
+1022|321.987.654-22|Gustavo Luiz Ferreira Silva|(92) 95544-3322|Rua Getulio Vargas, 100 - Laranjal, Manacapuru - AM|200 mbps
+1023|987.123.456-23|Priscila Cristina Oliveira Santos|(92) 94433-2211|Rua Getulio Vargas, 200 - Laranjal, Manacapuru - AM|400 mbps
+1024|123.987.456-24|Fabio Rogerio Alves Pereira|(92) 93322-1100|Av. Brasil, 100 - Castanheira, Manacapuru - AM|900 mbps
+1025|456.987.123-25|Leticia Adriana Souza Lima|(92) 92211-0099|Av. Brasil, 200 - Castanheira, Manacapuru - AM|200 mbps
+1026|789.654.321-26|Vinicius Andre Rocha Nunes|(92) 91100-9988|Rua Monte Castelo, 100 - Novo Horizonte, Manacapuru - AM|400 mbps
+1027|147.852.963-27|Mariana Cecilia Alves Costa|(92) 90088-7766|Rua Monte Castelo, 200 - Novo Horizonte, Manacapuru - AM|900 mbps
+1028|258.963.147-28|Renato Sergio Martins Lima|(92) 97777-6666|Rua da Paz, 100 - Parque Amazonia, Manacapuru - AM|200 mbps
+1029|963.258.147-29|Roberta Cristina Ferreira Silva|(92) 96666-5555|Rua da Paz, 200 - Parque Amazonia, Manacapuru - AM|400 mbps
+1030|369.852.741-30|Jose Roberto Alves Santos|(92) 95555-4444|Rua da Paz, 300 - Parque Amazonia, Manacapuru - AM|900 mbps
