@@ -1,0 +1,26 @@
+# Binários
+*.exe
+*.out
+*.app
+
+# Objetos
+*.o
+*.obj
+
+# Bibliotecas
+*.a
+*.so
+*.dll
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# Pastas de build
+build/
+bin/
+
+# Arquivos de editor/IDE
+.vscode/
+.idea/
+*.swp
