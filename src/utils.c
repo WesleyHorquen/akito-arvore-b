@@ -15,15 +15,6 @@ void pausar_tela() {
     getchar();
 }
 
-// Limpa a tela do console (funciona em Windows e Linux/Mac)
-void limpar_tela() {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
-}
-
 // Exibe um menu e obtém uma opção válida do usuário
 int obter_opcao_menu(const char* menu, int opcao_min, int opcao_max) {
     int opcao_escolhida;

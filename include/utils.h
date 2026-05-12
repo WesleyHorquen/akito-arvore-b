@@ -11,7 +11,6 @@
 // Protótipos das funções utilitárias
 void limpar_buffer_entrada();
 void pausar_tela();
-void limpar_tela();
 int obter_opcao_menu(const char* menu, int opcao_min, int opcao_max);
 void exibir_planos_disponiveis();
 

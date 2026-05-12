@@ -5,8 +5,8 @@
 
 // Cria um novo contrato com os dados fornecidos
 Contrato* criar_novo_contrato(int numero_contrato, const char* cpf, 
-                               const char* nome, const char* telefone, 
-                               const char* endereco, const char* plano) {
+                               const char* nome_completo, const char* telefone, 
+                               const char* endereco_completo, const char* plano) {
     Contrato* novo_contrato = (Contrato*)malloc(sizeof(Contrato));
     if (novo_contrato == NULL) {
         printf(">>> Erro: Falha ao alocar memoria para o contrato.\n");
@@ -15,9 +15,24 @@ Contrato* criar_novo_contrato(int numero_contrato, const char* cpf,
     
     novo_contrato->numero_contrato = numero_contrato;
     strcpy(novo_contrato->cpf, cpf);
-    strcpy(novo_contrato->nome_completo, nome);
+    novo_contrato->nome_completo = malloc(strlen(nome_completo) + 1);
+
+    if (novo_contrato->nome_completo == NULL) {
+        free(novo_contrato);
+    return NULL;
+    }
+    strcpy(novo_contrato->nome_completo, nome_completo);
+    novo_contrato->endereco_completo = malloc(strlen(endereco_completo) + 1);
+
+    if (novo_contrato->endereco_completo == NULL) {
+
+        free(novo_contrato->nome_completo);
+        free(novo_contrato);
+    return NULL;
+}
+
+    strcpy(novo_contrato->endereco_completo, endereco_completo);
     strcpy(novo_contrato->telefone, telefone);
-    strcpy(novo_contrato->endereco_completo, endereco);
     strcpy(novo_contrato->plano_contratado, plano);
     
     return novo_contrato;
@@ -26,6 +41,8 @@ Contrato* criar_novo_contrato(int numero_contrato, const char* cpf,
 // Libera a memória alocada para um contrato
 void liberar_contrato(Contrato* contrato) {
     if (contrato != NULL) {
+        free(contrato->nome_completo);
+        free(contrato->endereco_completo);
         free(contrato);
     }
 }

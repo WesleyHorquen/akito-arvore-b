@@ -4,11 +4,11 @@
 // Estrutura que representa um contrato de internet
 typedef struct Contrato {
     int numero_contrato;        // Chave primária (única)
-    char cpf[12];               // Formato: 000.000.000-00
-    char nome_completo[100];    // Nome completo do cliente
-    char telefone[20];          // Formato: (99) 99999-9999
-    char endereco_completo[200];// Endereço residencial ou comercial
-    char plano_contratado[20];  // 200mbps, 400mbps ou 900mbps
+    char cpf[15];               // Formato: 000.000.000-00
+    char* nome_completo;        // Nome completo do cliente (tamanho variável)
+    char telefone[16];          // Formato: (99) 99999-9999
+    char* endereco_completo;    // Endereço residencial ou comercial (tamanho variável)
+    char plano_contratado[9];   // 200mbps, 400mbps ou 900mbps
 } Contrato;
 
 // Protótipos das funções

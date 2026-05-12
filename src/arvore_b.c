@@ -257,7 +257,7 @@ void exibir_arvore_estrutura(NoArvoreB* no_atual, int nivel_atual) {
     }
     
     // Imprime as chaves do nó atual
-    printf("└─ Noh [");
+    printf("> Noh [");
     for (int i = 0; i < no_atual->quantidade_chaves; i++) {
         printf("%d", no_atual->chaves[i]);
         if (i < no_atual->quantidade_chaves - 1) {
