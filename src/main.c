@@ -6,17 +6,15 @@
 #include "cliente.h"
 #include "utils.h"
 
-#define AMARELO "\033[1;33m"
-#define AZUL "\033[1;34m"
-#define RESET "\033[0m"
-
 // Variáveis globais
 NoArvoreB* raiz_arvore = NULL;
 int ultimo_numero_contrato = 0;
 
 // Protótipos das funções do sistema
 void cadastrar_novo_contrato();
+void modificar_contrato_existente();
 void excluir_contrato_existente();
+void buscar_contrato_por_id();
 void buscar_contrato_por_nome_ou_cpf();
 void listar_todos_contratos();
 void visualizar_estrutura_arvore();
@@ -25,29 +23,6 @@ void salvar_e_sair();
 // Função para gerar novo número de contrato
 int gerar_proximo_numero_contrato() {
     return ++ultimo_numero_contrato;
-}
-
-// Função para validar e obter um CPF válido
-void obter_cpf_valido(char* cpf_destino, int contrato_ignorar) {
-    int cpf_valido = 0;
-    
-    while (!cpf_valido) {
-        printf("CPF (formato 000.000.000-00): ");
-        scanf(" %[^\n]", cpf_destino);
-        
-        if (!validar_formato_cpf(cpf_destino)) {
-            printf("> Formato de CPF invalido! Use o formato 000.000.000-00\n");
-            continue;
-        }
-        
-        // Verifica se o CPF já existe (pode ter múltiplos contratos)
-        if (verificar_cpf_existente(raiz_arvore, cpf_destino, contrato_ignorar)) {
-            printf(">>> ATENCAO: Este CPF ja possui contrato(s) cadastrado(s). <<<\n");
-            printf(">>> Voce pode cadastrar outro contrato para o mesmo CPF.\n");
-        }
-        
-        cpf_valido = 1;
-    }
 }
 
 // Função para obter o plano escolhido
@@ -83,11 +58,9 @@ void cadastrar_novo_contrato() {
     printf("|                    CADASTRAR NOVO CONTRATO                    |\n");
     printf("=================================================================\n\n");
     
-    // Gera número automático do contrato
     int numero_contrato = gerar_proximo_numero_contrato();
     printf("> Numero do contrato: %d\n", numero_contrato);
     
-    // Coleta os dados do cliente
     char cpf[15];
     char buffer_nome[200];
     char* nome_completo;
@@ -96,17 +69,17 @@ void cadastrar_novo_contrato() {
     char* endereco_completo;
     char plano_escolhido[9];
     
-    obter_cpf_valido(cpf, -1);
-    
     printf("Nome completo: ");
     scanf(" %[^\n]", buffer_nome);
     nome_completo = malloc(strlen(buffer_nome) + 1);
-
     if (nome_completo == NULL) {
-    printf(">> Erro de memoria.\n");
-    return;
+        printf(">> Erro de memoria.\n");
+        return;
     }
     strcpy(nome_completo, buffer_nome);
+
+    printf("CPF: ");
+    scanf(" %[^\n]", cpf);
     
     printf("Telefone (formato (99) 99999-9999): ");
     scanf(" %[^\n]", telefone);
@@ -114,7 +87,6 @@ void cadastrar_novo_contrato() {
     printf("Endereco completo: ");
     scanf(" %[^\n]", buffer_endereco);
     endereco_completo = malloc(strlen(buffer_endereco) + 1);
-
     if (endereco_completo == NULL) {
         printf(">> Erro de memoria.\n");
         free(nome_completo);
@@ -124,97 +96,177 @@ void cadastrar_novo_contrato() {
 
     obter_plano_escolhido(plano_escolhido);
     
-    // Cria o contrato
     Contrato* novo_contrato = criar_novo_contrato(numero_contrato, cpf, nome_completo, 
                                                    telefone, endereco_completo, plano_escolhido);
     
     if (novo_contrato == NULL) {
         printf(">>> Erro: Nao foi possivel criar o contrato.\n");
+        free(nome_completo);
+        free(endereco_completo);
         return;
     }
     
-    // Insere na árvore B
     inserir_contrato_arvore_b(&raiz_arvore, novo_contrato);
-    
-    // Salva no arquivo
     salvar_contrato_no_arquivo(novo_contrato);
     
     printf("\n>> CONTRATO CADASTRADO COM SUCESSO! <<\n");
     printf("   Numero do contrato: %d\n", numero_contrato);
     printf("   Cliente: %s\n", nome_completo);
     printf("   Plano: %s\n", plano_escolhido);
+    
+    free(nome_completo);
+    free(endereco_completo);
 }
 
-// EXCLUIR CONTRATO EXISTENTE
+// MODIFICAR CONTRATO EXISTENTE (por chave primária)
+void modificar_contrato_existente() {
+    printf("\n=================================================================\n");
+    printf("|                      MODIFICAR CONTRATO                       |\n");
+    printf("=================================================================\n\n");
+    
+    int id_contrato;
+    printf("> Digite o NUMERO DO CONTRATO (chave primaria) para modificar: ");
+    scanf("%d", &id_contrato);
+    
+    Contrato* contrato_encontrado = buscar_por_numero_contrato(raiz_arvore, id_contrato);
+    
+    if (contrato_encontrado == NULL) {
+        printf(">> Nenhum contrato encontrado com o numero %d\n", id_contrato);
+        pausar_tela();
+        return;
+    }
+    
+    printf("\n>>> CONTRATO ENCONTRADO (DADOS ATUAIS):\n");
+    exibir_dados_contrato(contrato_encontrado);
+    
+    printf("\n>>> O QUE DESEJA MODIFICAR?\n");
+    printf("    1. Telefone\n");
+    printf("    2. Endereco\n");
+    printf("    3. Plano\n");
+    printf("    0. Cancelar\n");
+    
+    int opcao_modificacao;
+    printf("\n> Escolha uma opcao: ");
+    scanf("%d", &opcao_modificacao);
+    
+    if (opcao_modificacao == 0) {
+        printf("> Modificacao cancelada.\n");
+        pausar_tela();
+        return;
+    }
+    
+    char novo_valor[300];
+    char* temp_endereco;
+    
+    switch (opcao_modificacao) {
+        case 1:
+            printf("> Novo telefone (formato (99) 99999-9999): ");
+            scanf(" %[^\n]", novo_valor);
+            strcpy(contrato_encontrado->telefone, novo_valor);
+            break;
+            
+        case 2:
+            printf("> Novo endereco completo: ");
+            scanf(" %[^\n]", novo_valor);
+            temp_endereco = malloc(strlen(novo_valor) + 1);
+            if (temp_endereco != NULL) {
+                strcpy(temp_endereco, novo_valor);
+                free(contrato_encontrado->endereco_completo);
+                contrato_encontrado->endereco_completo = temp_endereco;
+            }
+            break;
+            
+        case 3:
+            obter_plano_escolhido(contrato_encontrado->plano_contratado);
+            break;
+            
+        default:
+            printf(">> Opcao invalida!\n");
+            pausar_tela();
+            return;
+    }
+    
+    reescrever_arquivo_completo(raiz_arvore);
+    
+    printf("\n>> CONTRATO #%d MODIFICADO COM SUCESSO!\n", id_contrato);
+    printf("\n>>> NOVOS DADOS DO CONTRATO:\n");
+    exibir_dados_contrato(contrato_encontrado);
+    
+    pausar_tela();
+}
+
+// EXCLUIR CONTRATO (por chave primária)
 void excluir_contrato_existente() {
     printf("\n=================================================================\n");
     printf("|                      EXCLUIR CONTRATO                         |\n");
     printf("=================================================================\n\n");
     
-    char termo_busca[100];
-    printf("> Digite o nome ou CPF do cliente: ");
-    scanf(" %[^\n]", termo_busca);
+    int id_contrato;
+    printf("> Digite o NUMERO DO CONTRATO (chave primaria) para excluir: ");
+    scanf("%d", &id_contrato);
     
-    Contrato* resultados[100];
-    int quantidade_encontrada = 0;
+    Contrato* contrato_encontrado = buscar_por_numero_contrato(raiz_arvore, id_contrato);
     
-    buscar_por_nome_ou_cpf(raiz_arvore, termo_busca, resultados, &quantidade_encontrada);
-    
-    if (quantidade_encontrada == 0) {
-        printf("> Nenhum contrato encontrado com o termo '%s'\n", termo_busca);
+    if (contrato_encontrado == NULL) {
+        printf(">> Nenhum contrato encontrado com o numero %d\n", id_contrato);
         pausar_tela();
         return;
     }
     
-    printf("\n============ CONTRATOS ENCONTRADOS ============\n");
-    for (int indice = 0; indice < quantidade_encontrada; indice++) {
-        printf("| %2d. Contrato #%-6d | %-20s | Tel: %-15s |\n", 
-               indice + 1, 
-               resultados[indice]->numero_contrato,
-               resultados[indice]->nome_completo,
-            resultados[indice]->telefone);
-        printf("|    CPF: %-11s | Plano: %-8s |\n",
-               resultados[indice]->cpf,
-               resultados[indice]->plano_contratado);
-        printf("===========================================\n");
-    }
-    printf("===========================================\n");
+    printf("\n>>> CONTRATO ENCONTRADO:\n");
+    exibir_dados_contrato(contrato_encontrado);
     
-    int opcao_escolhida;
-    printf("\n> Qual contrato deseja excluir? (1-%d): ", quantidade_encontrada);
-    scanf("%d", &opcao_escolhida);
+    char confirmacao;
+    printf("\n> Confirmar exclusao deste contrato? (S/N): ");
+    scanf(" %c", &confirmacao);
     
-    if (opcao_escolhida < 1 || opcao_escolhida > quantidade_encontrada) {
-        printf(">> Opcao invalida!\n");
-        pausar_tela();
-        return;
-    }
-    
-    int contrato_para_remover = resultados[opcao_escolhida - 1]->numero_contrato;
-    
-    // Remove da árvore
-    if (remover_contrato_arvore_b(&raiz_arvore, contrato_para_remover)) {
-        // Reescreve o arquivo sem o contrato removido
-        reescrever_arquivo_completo(raiz_arvore);
-        printf("\n> Contrato #%d excluido com sucesso!\n", contrato_para_remover);
+    if (confirmacao == 'S' || confirmacao == 's') {
+        if (remover_contrato_arvore_b(&raiz_arvore, id_contrato)) {
+            reescrever_arquivo_completo(raiz_arvore);
+            printf("\n>> CONTRATO #%d EXCLUIDO COM SUCESSO!\n", id_contrato);
+        } else {
+            printf("\n>> ERRO AO EXCLUIR O CONTRATO!\n");
+        }
     } else {
-        printf("\n>> Erro ao excluir o contrato!\n");
+        printf("\n> Exclusao cancelada.\n");
     }
     
     pausar_tela();
 }
 
-// BUSCAR CONTRATO POR NOME OU CPF
+// BUSCAR CONTRATO POR ID (chave primária)
+void buscar_contrato_por_id() {
+    printf("\n==============================================================\n");
+    printf("|              BUSCAR CONTRATO POR ID (CHAVE PRIMARIA)        |\n");
+    printf("==============================================================\n\n");
+    
+    int id_contrato;
+    printf("> Digite o NUMERO DO CONTRATO: ");
+    scanf("%d", &id_contrato);
+    
+    Contrato* contrato_encontrado = buscar_por_numero_contrato(raiz_arvore, id_contrato);
+    
+    if (contrato_encontrado == NULL) {
+        printf(">> Nenhum contrato encontrado com o numero %d\n", id_contrato);
+    } else {
+        printf("\n==================== CONTRATO ENCONTRADO ====================\n");
+        exibir_dados_contrato(contrato_encontrado);
+    }
+    
+    pausar_tela();
+}
+
+// BUSCAR CONTRATO POR NOME OU CPF (busca secundária)
 void buscar_contrato_por_nome_ou_cpf() {
     printf("\n==============================================================\n");
-    printf("|                    BUSCAR CONTRATO                           |\n");
+    printf("|              BUSCAR CONTRATO POR NOME OU CPF                |\n");
     printf("==============================================================\n\n");
     
     char termo_busca[100];
     printf("> Digite o nome ou CPF para busca: ");
     scanf(" %[^\n]", termo_busca);
     
-    Contrato* resultados[100];
+    Contrato* resultados[1000];
     int quantidade_encontrada = 0;
     
     buscar_por_nome_ou_cpf(raiz_arvore, termo_busca, resultados, &quantidade_encontrada);
@@ -230,18 +282,19 @@ void buscar_contrato_por_nome_ou_cpf() {
         printf("\n");
         exibir_dados_contrato(resultados[indice]);
     }
-    printf("==============================================================\n");
-    printf("\n> Total de contratos encontrados: %d\n", quantidade_encontrada);
+    printf("\n==============================================================\n");
+    printf("> Total de contratos encontrados: %d\n", quantidade_encontrada);
     
     pausar_tela();
 }
 
-// LISTAR TODOS OS CONTRATOS
+// LISTAR TODOS OS CONTRATOS - Versão detalhada por contrato
 void listar_todos_contratos() {
     printf("\n");
-    printf("=============================================================================\n");
-    printf("                    TODOS OS CONTRATOS CADASTRADOS                          \n");
-    printf("=============================================================================\n\n");
+    printf("================================================================================\n");
+    printf("                          TODOS OS CONTRATOS CADASTRADOS                        \n");
+    printf("                           (ORDENADOS PELA CHAVE PRIMARIA)                      \n");
+    printf("================================================================================\n\n");
     
     int total_contratos = contar_total_contratos(raiz_arvore);
     
@@ -251,41 +304,35 @@ void listar_todos_contratos() {
         return;
     }
     
-    // Coleta todos os contratos em ordem
-    Contrato* lista_ordenada[1000];
+    Contrato** lista_ordenada = (Contrato**)malloc(total_contratos * sizeof(Contrato*));
+    if (lista_ordenada == NULL) {
+        printf(">>> Erro de memoria!\n");
+        pausar_tela();
+        return;
+    }
+    
     int indice_atual = 0;
-    
     percorrer_arvore_em_ordem(raiz_arvore, lista_ordenada, &indice_atual);
-    
-    // Cabeçalho da tabela
-    printf("+----+------------+------------------------------------------+---------------------------+------------+------------+\n");
-    printf("| #  | Contrato   | Nome do Cliente                          | CPF                       | Telefone   | Plano      |\n");
-    printf("+----+------------+------------------------------------------+---------------------------+------------+------------+\n");
     
     for (int indice = 0; indice < total_contratos; indice++) {
         Contrato* contrato_atual = lista_ordenada[indice];
         
-        // Limita o nome a 40 caracteres para caber na tabela
-        char nome_curto[41];
-        strncpy(nome_curto, contrato_atual->nome_completo, 40);
-        nome_curto[40] = '\0';
-        
-        printf("| %2d | #%-8d  | %-40s | %-15s | %-16s | %-10s |\n",
-               indice + 1,
-               contrato_atual->numero_contrato,
-               nome_curto,
-               contrato_atual->cpf,
-               contrato_atual->telefone,
-               contrato_atual->plano_contratado);
-        
-        if (indice < total_contratos - 1) {
-            printf("+----+------------+------------------------------------------+---------------------------+------------+------------+\n");
-        }
+        printf("================================================================================\n");
+        printf("                               CONTRATO #%d\n", contrato_atual->numero_contrato);
+        printf("================================================================================\n");
+        printf("  Nome Completo:      %s\n", contrato_atual->nome_completo);
+        printf("  CPF:                %s\n", contrato_atual->cpf);
+        printf("  Telefone:           %s\n", contrato_atual->telefone);
+        printf("  Endereco:           %s\n", contrato_atual->endereco_completo);
+        printf("  Plano:              %s\n", contrato_atual->plano_contratado);
+        printf("\n");
     }
     
-    printf("+----+------------+------------------------------------------+---------------------------+------------+------------+\n");
-    printf("\n>>> Total de contratos: %d\n", total_contratos);
+    printf("================================================================================\n");
+    printf(">>> Total de contratos: %d\n", total_contratos);
+    printf("================================================================================\n");
     
+    free(lista_ordenada);
     pausar_tela();
 }
 
@@ -332,21 +379,23 @@ void exibir_menu_principal() {
     printf("\n");
     printf("================================================================================\n");
     printf("\n");
-    printf(AMARELO"                                  A K I T O                                     \n" RESET);
+    printf(COR_AMARELO"                                  A K I T O                                     \n" COR_RESET);
     printf("\n");
-    printf(AZUL"                     SISTEMA DE GERENCIAMENTO DE CONTRATOS                       \n" RESET);
-    printf(AZUL"                            PROVEDORA DE INTERNET                                \n" RESET);
+    printf(COR_AZUL"                     SISTEMA DE GERENCIAMENTO DE CONTRATOS                       \n" COR_RESET);
+    printf(COR_AZUL"                            PROVEDORA DE INTERNET                                \n" COR_RESET);
     printf("\n");
     printf("================================================================================\n");
     printf("\n");
     printf("                               MENU PRINCIPAL                                    \n");
     printf("\n");
     printf("                          1. Cadastrar novo contrato                            \n");
-    printf("                          2. Excluir contrato                                   \n");
-    printf("                          3. Buscar contrato (por nome ou CPF)                  \n");
-    printf("                          4. Listar todos os contratos                          \n");
-    printf("                          5. Visualizar estrutura da Arvore B                   \n");
-    printf("                          6. Salvar dados e sair                                \n");
+    printf("                          2. Modificar contrato (por ID)                        \n");
+    printf("                          3. Excluir contrato (por ID)                          \n");
+    printf("                          4. Buscar contrato por ID (chave primaria)            \n");
+    printf("                          5. Buscar contrato por nome ou CPF                    \n");
+    printf("                          6. Listar todos os contratos (ordenados por ID)       \n");
+    printf("                          7. Visualizar estrutura da Arvore B                   \n");
+    printf("                          8. Salvar dados e sair                                \n");
     printf("\n");
     printf("================================================================================\n");
     printf("\n");
@@ -354,7 +403,6 @@ void exibir_menu_principal() {
 
 // FUNÇÃO PRINCIPAL
 int main() {
-    // Carrega os dados salvos anteriormente
     printf("\n> Carregando dados do arquivo %s...\n", ARQUIVO_CONTRATOS);
     carregar_contratos_do_arquivo(&raiz_arvore, &ultimo_numero_contrato);
     
@@ -362,7 +410,7 @@ int main() {
     
     do {
         exibir_menu_principal();
-        printf("> Digite sua opcao: ");
+        printf("> Digite sua opcao (1-8): ");
         scanf("%d", &opcao_selecionada);
         limpar_buffer_entrada();
         
@@ -371,18 +419,24 @@ int main() {
                 cadastrar_novo_contrato();
                 break;
             case 2:
-                excluir_contrato_existente();
+                modificar_contrato_existente();
                 break;
             case 3:
-                buscar_contrato_por_nome_ou_cpf();
+                excluir_contrato_existente();
                 break;
             case 4:
-                listar_todos_contratos();
+                buscar_contrato_por_id();
                 break;
             case 5:
-                visualizar_estrutura_arvore();
+                buscar_contrato_por_nome_ou_cpf();
                 break;
             case 6:
+                listar_todos_contratos();
+                break;
+            case 7:
+                visualizar_estrutura_arvore();
+                break;
+            case 8:
                 salvar_e_sair();
                 break;
             default:
@@ -390,9 +444,8 @@ int main() {
                 pausar_tela();
                 break;
         }
-    } while (opcao_selecionada != 6);
+    } while (opcao_selecionada != 8);
     
-    // Libera a memória alocada
     liberar_arvore_b(raiz_arvore);
     
     return 0;

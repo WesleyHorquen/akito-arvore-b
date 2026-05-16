@@ -1,8 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "arvore_b.h"
-
 // Cores ANSI
 #define COR_AMARELO "\033[1;33m"
 #define COR_AZUL "\033[1;34m"
