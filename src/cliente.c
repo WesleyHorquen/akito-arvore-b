@@ -3,7 +3,7 @@
 #include <string.h>
 #include "cliente.h"
 
-// Cria um novo contrato com os dados fornecidos
+// Cria um novo contrato
 Contrato* criar_novo_contrato(int numero_contrato, const char* cpf, 
                                const char* nome_completo, const char* telefone, 
                                const char* endereco_completo, const char* plano) {
@@ -47,7 +47,7 @@ void liberar_contrato(Contrato* contrato) {
     }
 }
 
-// Exibe todos os dados de um contrato na tela
+// Exibe todos os dados de um contrato
 void exibir_dados_contrato(Contrato* contrato) {
     if (contrato == NULL) {
         printf(">> Contrato invalido (NULL).\n");
@@ -63,7 +63,7 @@ void exibir_dados_contrato(Contrato* contrato) {
     printf("| Plano: %s\n", contrato->plano_contratado);
     printf("===========================================\n");
 }
-
+/*
 // Valida se o CPF está no formato correto
 int validar_formato_cpf(const char* cpf) {
     // Verifica o tamanho
@@ -80,6 +80,7 @@ int validar_formato_cpf(const char* cpf) {
     
     return 1;
 }
+*/
 
 // Verifica se o plano escolhido é válido
 int validar_plano(const char* plano) {

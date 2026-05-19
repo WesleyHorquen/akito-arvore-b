@@ -4,7 +4,7 @@
 #include "persistencia.h"
 #include "cliente.h"
 
-// Salva um único contrato no final do arquivo (modo append)
+// Função para salvar um contrato no arquivo
 void salvar_contrato_no_arquivo(Contrato* contrato) {
     if (contrato == NULL) {
         return;
@@ -70,7 +70,7 @@ void reescrever_arquivo_completo(NoArvoreB* raiz) {
     fclose(arquivo);
 }
 
-// Salva todos os contratos da árvore no arquivo (substitui o conteúdo)
+// Salva todos os contratos da árvore no arquivo
 void salvar_todos_contratos_no_arquivo(NoArvoreB* raiz) {
     reescrever_arquivo_completo(raiz);
     printf("> Todos os contratos foram salvos no arquivo %s\n", ARQUIVO_CONTRATOS);

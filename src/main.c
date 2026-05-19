@@ -81,7 +81,7 @@ void cadastrar_novo_contrato() {
     printf("CPF: ");
     scanf(" %[^\n]", cpf);
     
-    printf("Telefone (formato (99) 99999-9999): ");
+    printf("Telefone:");
     scanf(" %[^\n]", telefone);
     
     printf("Endereco completo: ");
@@ -111,7 +111,7 @@ void cadastrar_novo_contrato() {
     
     printf("\n>> CONTRATO CADASTRADO COM SUCESSO! <<\n");
     printf("   Numero do contrato: %d\n", numero_contrato);
-    printf("   Cliente: %s\n", nome_completo);
+    printf("   Cliente: %s\n | CPF: %s\n", nome_completo, cpf);
     printf("   Plano: %s\n", plano_escolhido);
     
     free(nome_completo);
@@ -160,7 +160,7 @@ void modificar_contrato_existente() {
     
     switch (opcao_modificacao) {
         case 1:
-            printf("> Novo telefone (formato (99) 99999-9999): ");
+            printf("> Novo telefone: ");
             scanf(" %[^\n]", novo_valor);
             strcpy(contrato_encontrado->telefone, novo_valor);
             break;
@@ -195,7 +195,7 @@ void modificar_contrato_existente() {
     pausar_tela();
 }
 
-// EXCLUIR CONTRATO (por chave primária)
+// EXCLUIR CONTRATO
 void excluir_contrato_existente() {
     printf("\n=================================================================\n");
     printf("|                      EXCLUIR CONTRATO                         |\n");
@@ -234,7 +234,7 @@ void excluir_contrato_existente() {
     pausar_tela();
 }
 
-// BUSCAR CONTRATO POR ID (chave primária)
+// BUSCAR CONTRATO POR ID
 void buscar_contrato_por_id() {
     printf("\n==============================================================\n");
     printf("|              BUSCAR CONTRATO POR ID (CHAVE PRIMARIA)        |\n");
@@ -256,7 +256,7 @@ void buscar_contrato_por_id() {
     pausar_tela();
 }
 
-// BUSCAR CONTRATO POR NOME OU CPF (busca secundária)
+// BUSCAR CONTRATO POR NOME OU CPF
 void buscar_contrato_por_nome_ou_cpf() {
     printf("\n==============================================================\n");
     printf("|              BUSCAR CONTRATO POR NOME OU CPF                |\n");
@@ -288,7 +288,6 @@ void buscar_contrato_por_nome_ou_cpf() {
     pausar_tela();
 }
 
-// LISTAR TODOS OS CONTRATOS - Versão detalhada por contrato
 void listar_todos_contratos() {
     printf("\n");
     printf("================================================================================\n");
@@ -354,8 +353,7 @@ void visualizar_estrutura_arvore() {
     printf("   - Minimo de chaves por no: %d\n", MINIMO_CHAVES_POR_NO);
     printf("   - Total de contratos: %d\n\n", contar_total_contratos(raiz_arvore));
     
-    printf(">> Representacao visual da arvore:\n");
-    printf("   (Os numeros dentro dos nos sao os numeros dos contratos)\n\n");
+    printf(">> Representacao visual da arvore:\n\n");
     
     exibir_arvore_estrutura(raiz_arvore, 0);
     
@@ -389,11 +387,11 @@ void exibir_menu_principal() {
     printf("                               MENU PRINCIPAL                                    \n");
     printf("\n");
     printf("                          1. Cadastrar novo contrato                            \n");
-    printf("                          2. Modificar contrato (por ID)                        \n");
-    printf("                          3. Excluir contrato (por ID)                          \n");
-    printf("                          4. Buscar contrato por ID (chave primaria)            \n");
+    printf("                          2. Modificar contrato                                 \n");
+    printf("                          3. Excluir contrato                                   \n");
+    printf("                          4. Buscar contrato por ID                             \n");
     printf("                          5. Buscar contrato por nome ou CPF                    \n");
-    printf("                          6. Listar todos os contratos (ordenados por ID)       \n");
+    printf("                          6. Listar todos os contratos                          \n");
     printf("                          7. Visualizar estrutura da Arvore B                   \n");
     printf("                          8. Salvar dados e sair                                \n");
     printf("\n");

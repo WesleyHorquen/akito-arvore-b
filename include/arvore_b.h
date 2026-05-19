@@ -4,16 +4,16 @@
 #include "cliente.h"
 
 // Configurações da árvore B
-#define ORDEM_DA_ARVORE 3                    // Grau mínimo (t)
-#define MAXIMO_CHAVES_POR_NO (ORDEM_DA_ARVORE * 2 - 1)  // Máximo: 5 chaves
-#define MINIMO_CHAVES_POR_NO (ORDEM_DA_ARVORE - 1)       // Mínimo: 2 chaves
+#define ORDEM_DA_ARVORE 4                                // Grau da árvore (t)
+#define MAXIMO_CHAVES_POR_NO (ORDEM_DA_ARVORE * 2 - 1)   // Cálculo do máximo de chaves por nó (2t - 1)
+#define MINIMO_CHAVES_POR_NO (ORDEM_DA_ARVORE - 1)       // Cálculo do mínimo de chaves por nó (t - 1)
 
 // Estrutura do nó da árvore B
 typedef struct NoArvoreB {
     int quantidade_chaves;                           // Quantas chaves o nó possui atualmente
-    int chaves[MAXIMO_CHAVES_POR_NO];                // Vetor com os números dos contratos
+    int chaves[MAXIMO_CHAVES_POR_NO];                
     Contrato* contratos[MAXIMO_CHAVES_POR_NO];       // Vetor com ponteiros para os contratos
-    struct NoArvoreB* filhos[MAXIMO_CHAVES_POR_NO + 1]; // Vetor de ponteiros para os filhos
+    struct NoArvoreB* filhos[MAXIMO_CHAVES_POR_NO + 1]; 
     int eh_folha;                                    // 1 se for folha, 0 se for nó interno
 } NoArvoreB;
 

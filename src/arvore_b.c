@@ -150,7 +150,7 @@ Contrato* buscar_por_numero_contrato(NoArvoreB* no_atual, int numero_contrato) {
     return buscar_por_numero_contrato(no_atual->filhos[indice], numero_contrato);
 }
 
-// Função auxiliar para busca por nome ou CPF (recursiva)
+// Função auxiliar para busca por nome ou CPF
 void buscar_por_nome_ou_cpf(NoArvoreB* no_atual, const char* termo_busca, 
                             Contrato* resultados[], int* quantidade_encontrada) {
     if (no_atual == NULL || *quantidade_encontrada >= 100) {
@@ -183,7 +183,7 @@ void buscar_por_nome_ou_cpf(NoArvoreB* no_atual, const char* termo_busca,
     }
 }
 
-// Remove um contrato da árvore (simplificado - marca como removido)
+// Remove um contrato da árvore
 int remover_contrato_arvore_b(NoArvoreB** raiz, int numero_contrato) {
     if (*raiz == NULL) {
         return 0;
@@ -320,7 +320,7 @@ int contar_total_contratos(NoArvoreB* no_atual) {
     return total;
 }
 
-// Verifica se um CPF já existe na árvore (útil para validação)
+// Verifica se um CPF já existe na árvore
 int verificar_cpf_existente(NoArvoreB* no_atual, const char* cpf, int contrato_ignorar) {
     if (no_atual == NULL) {
         return 0;
@@ -330,7 +330,7 @@ int verificar_cpf_existente(NoArvoreB* no_atual, const char* cpf, int contrato_i
         Contrato* contrato_atual = no_atual->contratos[indice];
         if (contrato_atual != NULL && contrato_atual->numero_contrato != contrato_ignorar) {
             if (strcmp(contrato_atual->cpf, cpf) == 0) {
-                return 1; // CPF encontrado
+                return 1;
             }
         }
     }
